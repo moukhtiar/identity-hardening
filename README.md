@@ -1,119 +1,204 @@
-# Identity Hardening with Microsoft Entra ID
+# Microsoft Entra ID Identity Hardening Project
 
-## Objective
+![Identity](https://img.shields.io/badge/Identity-Microsoft%20Entra%20ID-5E5ADB)
+![Security](https://img.shields.io/badge/Security-Conditional%20Access-008272)
+![PIM](https://img.shields.io/badge/Access-PIM-7C3AED)
+![MFA](https://img.shields.io/badge/Auth-Multi--Factor%20Authentication-0078D4)
+![Monitoring](https://img.shields.io/badge/Monitoring-Sign--In%20Logs-2563EB)
+![Audit](https://img.shields.io/badge/Audit-Audit%20Logs-0F766E)
+![Scripting](https://img.shields.io/badge/Scripting-PowerShell-5391FE)
 
-Strengthen your Azure environment’s identity and access security using Microsoft Entra ID features, including:
+---
 
-- Conditional Access (CA)
-- Privileged Identity Management (PIM)
-- Secure group/user configurations
+## Overview
 
-## Tools & Services Used
+This project focuses on strengthening identity and access security using Microsoft Entra ID security features such as Conditional Access, Privileged Identity Management (PIM), Multi-Factor Authentication (MFA), and identity monitoring.
+
+The environment simulates real-world identity protection scenarios and validates secure administrative access practices.
+
+---
+
+## Objectives
+
+The project includes:
+
+- Conditional Access policy configuration
+- MFA enforcement and testing
+- Privileged role assignment using PIM
+- Risky sign-in monitoring
+- Sign-in and audit log analysis
+- Secure user and group management
+
+---
+
+## Technologies Used
 
 - Microsoft Entra ID
 - Conditional Access Policies
 - Privileged Identity Management (PIM)
-- Azure Sign-In & Audit Logs
-- MFA Configuration
-
-## Lab Activities
-
-###  Step 1: Create Security Group and Test Users
-
-- Created `demo-user1` and `demo-user2`
-- Group: `grp-security-testers`
-- Added users to group
-
-   Screenshot: `Screenshots/Step1-users-created.png`
+- Multi-Factor Authentication (MFA)
+- Azure Sign-In Logs
+- Azure Audit Logs
+- PowerShell
 
 ---
 
-###  Step 2: Configure and Test Conditional Access Policy
+## Step 1 — Security Group and User Setup
 
-- Created CA policy: `MFA for Security Testers`
-- Targeted `grp-security-testers` group
-- Required MFA for Microsoft Azure Management
-- Verified prompt using incognito session
+Created test users and a dedicated security group for Conditional Access policy targeting.
 
-   Screenshots:  
-- `Screenshots/Step2-ca-policy-summary.png`  
-- `Screenshots/Step2-mfa-prompt.png`
+### Objects Created
 
----
+| Type | Name |
+|---|---|
+| User | `demo-user1` |
+| User | `demo-user2` |
+| Group | `grp-security-testers` |
 
-### Risky Sign-In Triggered and Detected (Demo User1)
+### Validation
 
-- A sign-in from **Demo User1** triggered a **"risky sign-in"** event.
-- Microsoft Entra flagged this based on sign-in behavior and simulated risk conditions.
-- Verified that Conditional Access required MFA during this attempt.
-- Reviewed alert under **Entra ID Protection > Risky sign-ins**.
+- Users added successfully to security group
+- Group used later for Conditional Access targeting
 
- Screenshot:
-- `Screenshots/Step2-risky-signin-demo-user1.png`
-
-![Risky Sign-In - Demo User1](Screenshots/risky-signin-demo-user1.png)
-
-
----
-### Step 3: Role Assignment via Privileged Identity Management (PIM)
-
-- Assigned `Security Administrator` role to `demo-user1`
-- Made user **eligible** and activated via PIM
-- Verified in PIM > My Roles
-
-  Screenshots:  
-- `Screenshots/Step4-role-assignment.png`  
-- `Screenshots/Step4-pim-activation.png`
+![Users Created](./Screenshots/Step1-users-created.png)
 
 ---
 
-### Step 4: Log & Audit Review
+## Step 2 — Conditional Access Policy Configuration
 
-- Reviewed **Sign-in Logs** and **Audit Logs**
-- Validated role activations and MFA attempts
+Configured a Conditional Access policy to require Multi-Factor Authentication for Azure management access.
 
-   Screenshots:  
-- `Screenshots/Step5-signin-log.png`  
-- `Screenshots/Step5-audit-log.png`
+### Policy Configuration
+
+| Setting | Value |
+|---|---|
+| Policy Name | `MFA for Security Testers` |
+| Target Group | `grp-security-testers` |
+| Target Application | Microsoft Azure Management |
+| Access Control | Require MFA |
+
+### Validation
+
+- MFA prompt triggered successfully
+- Tested using incognito browser session
+
+![CA Policy](./Screenshots/Step2-ca-policy-summary.png)
+
+![MFA Prompt](./Screenshots/Step2-mfa-prompt.png)
 
 ---
 
-## Files Included
+## Risky Sign-In Detection
 
-- `README.md`: This file
-- `Report.md`: Summary of security findings
-- `Screenshots/`: Step-based visual evidence
+A simulated risky sign-in event was generated and detected successfully by Microsoft Entra ID Protection.
 
-  ---
-  ## Navigation
+### Validation Performed
 
-🔹 [⬅ Back to All Labs](../README.md)  
-🔹 [1 – Secure Azure Environment](../1-secure-azure-env/)  
-🔹 [3 – Entra Hybrid Identity Lab](../3-entra-hybrid-lab/)  
+- Risky sign-in detected for `demo-user1`
+- Conditional Access policy enforced MFA
+- Event reviewed under:
+  - `Entra ID Protection > Risky sign-ins`
+
+![Risky Sign-In](./Screenshots/risky-signin-demo-user1.png)
+---
+
+## Step 3 — Privileged Identity Management (PIM)
+
+Configured Privileged Identity Management for secure administrative role activation.
+
+### Role Assignment
+
+| User | Role | Assignment Type |
+|---|---|---|
+| `demo-user1` | Security Administrator | Eligible |
+
+### Validation
+
+- Role activated successfully through PIM
+- Verified under:
+  - `PIM > My Roles`
+
+![Role Assignment](./Screenshots/Step4-role-assignment.png)
+
+![PIM Activation](./Screenshots/Step4-pim-activation.png)
+
+---
+
+## Step 4 — Sign-In and Audit Log Review
+
+Reviewed authentication activity and administrative actions using Microsoft Entra monitoring tools.
+
+### Logs Reviewed
+
+- Sign-In Logs
+- Audit Logs
+- MFA activity
+- Role activation events
 
 ---
 
 ## Automation
 
-This lab includes a prototype automation script in `automation/setup-identity-hardening.ps1` that creates demo users, a security group, and a Conditional Access policy.
+The project includes a prototype PowerShell automation script:
+
+```txt
+automation/setup-identity-hardening.ps1
+```
+
+The script automates:
+
+- Demo user creation
+- Security group creation
+- Conditional Access policy deployment
 
 ---
 
-## Author
+## Project Structure
 
-**Muktar Mohamed**  
-🔗 [Connect on LinkedIn](https://www.linkedin.com/in/muktarmohamed)
-
----
-
-## Next Steps
-
-- Explore Identity Governance (Access Reviews, Entitlement Management)
-- Simulate leaked credentials scenarios
-- Integrate Defender for Identity with Sentinel
+```txt
+entra-id-identity-hardening/
+├── README.md
+├── Screenshots/
+├── docs/
+├── automation/
+└── scripts/
+```
 
 ---
 
-## Summary
+## Security Benefits Demonstrated
 
-This lab demonstrates the core capabilities of Microsoft Entra ID for identity protection, least privilege access, and monitoring. These features are crucial for a modern cloud security posture.
+- Reduced administrative exposure using PIM
+- Enforced MFA for privileged access
+- Improved visibility into authentication activity
+- Risk-based identity monitoring
+- Controlled access through Conditional Access policies
+
+---
+
+## Future Improvements
+
+Planned enhancements include:
+
+- Identity Governance testing
+- Access Reviews
+- Entitlement Management
+- Defender for Identity integration
+- Microsoft Sentinel integration
+- Simulated leaked credential scenarios
+
+---
+
+## Key Takeaways
+
+- Conditional Access is critical for protecting cloud identities
+- PIM reduces standing administrative privileges
+- MFA significantly improves identity security posture
+- Sign-in and audit logs provide valuable visibility into identity activity
+- Identity protection should combine prevention, monitoring, and least privilege access
+
+---
+
+## Status
+
+Completed — continuously expanding with additional identity security and monitoring scenarios.
