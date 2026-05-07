@@ -1,85 +1,199 @@
-# Step-by-Step Identity Hardening Lab with Screenshots
+# Microsoft Entra ID Identity Hardening — Implementation Guide
 
-A visual, hands-on walkthrough of Identity Hardening with Microsoft Entra ID. Screenshots are included to accompany each step.
+![Identity](https://img.shields.io/badge/Identity-Microsoft%20Entra%20ID-5E5ADB)
+![Security](https://img.shields.io/badge/Security-Conditional%20Access-008272)
+![PIM](https://img.shields.io/badge/Access-PIM-7C3AED)
+![MFA](https://img.shields.io/badge/Auth-Multi--Factor%20Authentication-0078D4)
+![Protection](https://img.shields.io/badge/Protection-Identity%20Protection-DC2626)
+![Monitoring](https://img.shields.io/badge/Monitoring-Sign--In%20Logs-2563EB)
 
 ---
 
-## Step 1: Create Test Users and Security Group
+## Overview
 
-1. Go to Microsoft Entra ID > Users > + New User
-2. Create:
-   - demo-user1 (standard user)
-   - demo-user2 (standard user)
-3. Assign temporary passwords and save them.
-4. Navigate to Groups > + New Group
-   - Group type: Security
-   - Name: grp-security-testers
-   - Add both test users as members.
+This guide documents the implementation of identity hardening controls using Microsoft Entra ID.
 
-**Screenshot:**  
+The project focuses on securing administrative access through Conditional Access, Multi-Factor Authentication (MFA), Privileged Identity Management (PIM), and identity monitoring.
+
+Screenshots are included throughout the guide to validate configuration and testing steps.
+
+---
+
+## Environment Components
+
+| Component | Purpose |
+|---|---|
+| Microsoft Entra ID | Identity and access management |
+| Conditional Access | MFA enforcement |
+| PIM | Just-in-time privileged access |
+| Sign-In Logs | Authentication monitoring |
+| Audit Logs | Administrative activity monitoring |
+
+---
+
+## Step 1 — Create Test Users and Security Group
+
+Created test users and a dedicated security group for Conditional Access policy targeting.
+
+### Users Created
+
+| User | Type |
+|---|---|
+| `demo-user1` | Standard User |
+| `demo-user2` | Standard User |
+
+### Security Group
+
+| Group | Purpose |
+|---|---|
+| `grp-security-testers` | Conditional Access targeting |
+
+### Actions Performed
+
+- Created test users
+- Assigned temporary passwords
+- Created security group
+- Added users to security group
+
 ![Users and Group Created](./Screenshots/Step1-users-created.png)
 
 ---
 
-## Step 2: Conditional Access Policy – Require MFA
+## Step 2 — Configure Conditional Access Policy
 
-1. Go to: Microsoft Entra ID > Protection > Conditional Access
-2. Click + New Policy
-3. Name it: MFA for Security Testers
-4. Configure the following:
-   - Users/Groups: grp-security-testers
-   - Cloud Apps: Microsoft Admin Portals
-   - Access Controls: Grant ➞ Require MFA
-   - Enable Policy: On
-5. Save and enable the policy.
-6. Open an Incognito Browser and sign in as demo-user1 to test the MFA requirement.
+Configured a Conditional Access policy to require MFA for Azure administrative access.
 
-**Screenshots:**  
-- Conditional Access Policy Summary:  
-  ![CA Policy Summary](./Screenshots/Step2-ca-policy-summary.png)
+### Policy Configuration
 
-- MFA Prompt (during test login):  
-  ![MFA Prompt](./Screenshots/Step2-mfa-prompt.png)
+| Setting | Value |
+|---|---|
+| Policy Name | `MFA for Security Testers` |
+| Target Group | `grp-security-testers` |
+| Cloud Apps | Microsoft Admin Portals |
+| Access Control | Require MFA |
+| Policy State | Enabled |
 
----
+### Validation
 
-### Risky Sign-In Triggered (Demo User1)
+- MFA challenge triggered successfully
+- Tested using incognito browser session
+- Policy applied correctly to targeted users
 
-- A risky sign-in was triggered for `Demo User1` as part of the Conditional Access test.
-- Microsoft Entra ID flagged the sign-in as high-risk based on behavior and location anomalies.
-- The user was prompted for MFA and access was monitored.
+### Screenshots
 
- Screenshot:
-![Risky Sign-In](Screenshots/risky-signin-demo-user1.png)
+#### Conditional Access Policy Summary
 
----
-## Step 3: Role Assignment via PIM (Privileged Identity Management)
+![CA Policy Summary](./Screenshots/Step2-ca-policy-summary.png)
 
-1. Go to: Microsoft Entra ID > Roles and Administrators
-2. Search and select the role: Security Administrator
-3. Click + Add Assignments
-   - Select demo-user1
-   - Assignment type: Eligible
-4. Go to: Microsoft Entra ID > PIM > My Roles
-5. Activate the role as demo-user1
-   - Provide justification and choose activation time.
+#### MFA Prompt During Sign-In
 
-**Screenshots:**  
-- Role Assignment Summary:  
-  ![PIM Role Assignment](./Screenshots/Step4-role-assignment.png)
-
-- PIM Activation Confirmation:  
-  ![PIM Activation](./Screenshots/Step4-pim-activation.png)
+![MFA Prompt](./Screenshots/Step2-mfa-prompt.png)
 
 ---
 
-## Wrap-Up
+## Risky Sign-In Detection
 
-- Test users and roles were created and tested successfully.
-- Conditional Access enforced MFA for selected users.
-- Role-based access was controlled and elevated using PIM.
+A simulated risky sign-in event was triggered and detected successfully by Microsoft Entra ID Protection.
 
-Refer to `Report.md` for written analysis and observations.
+### Detection Details
 
-Remember to clean up the test users, group, and role assignments when finished.
+- Risky sign-in triggered for:
+  - `demo-user1`
+- Sign-in flagged as high-risk
+- Conditional Access enforced MFA automatically
+- Event reviewed under:
+  - `Entra ID Protection > Risky sign-ins`
 
+### Validation Outcome
+
+- Risk event detected successfully
+- MFA challenge enforced
+- Authentication activity logged in Entra ID
+
+![Risky Sign-In](./Screenshots/risky-signin-demo-user1.png)
+
+---
+
+## Step 3 — Privileged Identity Management (PIM)
+
+Configured Privileged Identity Management to reduce standing administrative privileges.
+
+### Role Assignment
+
+| User | Role | Assignment Type |
+|---|---|---|
+| `demo-user1` | Security Administrator | Eligible |
+
+### Actions Performed
+
+- Assigned Security Administrator role
+- Configured eligible assignment
+- Activated role through PIM
+- Provided activation justification
+
+### Screenshots
+
+#### PIM Role Assignment
+
+![PIM Role Assignment](./Screenshots/Step4-role-assignment.png)
+
+#### PIM Activation
+
+![PIM Activation](./Screenshots/Step4-pim-activation.png)
+
+---
+
+## Step 4 — Sign-In and Audit Log Review
+
+Reviewed authentication and administrative activity using Microsoft Entra monitoring tools.
+
+### Logs Reviewed
+
+- Sign-In Logs
+- Audit Logs
+- MFA activity
+- PIM activation events
+- Risk detections
+
+### Validation
+
+- Successful MFA attempts confirmed
+- PIM activations logged correctly
+- Administrative actions recorded successfully
+
+---
+
+## Security Benefits Demonstrated
+
+- MFA enforcement for privileged access
+- Reduced standing administrative privileges
+- Improved visibility into identity activity
+- Risk-based authentication monitoring
+- Centralized identity protection controls
+
+---
+
+## Key Takeaways
+
+- Conditional Access is essential for protecting cloud identities
+- PIM reduces administrative exposure significantly
+- MFA improves resistance against credential compromise
+- Identity monitoring provides visibility into suspicious activity
+- Security groups simplify policy targeting and administration
+
+---
+
+## Cleanup Recommendations
+
+After testing:
+
+- Remove demo users
+- Delete test security groups
+- Remove unused role assignments
+- Disable unused Conditional Access policies
+
+---
+
+## Status
+
+Implementation completed successfully with MFA enforcement, PIM activation, and risky sign-in monitoring validated.
